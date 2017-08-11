@@ -1,0 +1,12 @@
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\PuppyProxy.exe
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\Newtonsoft.Json.dll
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\RegexMatcher.dll
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\RestWrapper.dll
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\SyslogLogging.dll
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\Watson.dll
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\RestWrapper.pdb
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\Newtonsoft.Json.xml
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\RegexMatcher.pdb
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\SyslogLogging.pdb
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\bin\Release\Watson.pdb
+D:\Code\Misc\PuppyProxyTcp\PuppyProxy\obj\x86\Release\PuppyProxy.exe
