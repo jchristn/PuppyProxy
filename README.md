@@ -19,18 +19,7 @@ NOTE: You may need to run as administrator if listening on a port under 1024.
 Windows
 C:\> PuppyProxy.exe
 C:\> PuppyProxy.exe --cfg=filename.txt
-
-Linux
-$ sudo mono --aot=nrgctx-trampolines=8096,nimt-trampolines=8096,ntrampolines=4048 --server PuppyProxy.exe
-$ sudo mono --server PuppyProxy.exe
 ```
 
 ## Running under Mono
-PuppyProxy works well in Mono environments to the extent that we have tested it. It is recommended that when running under Mono, you execute the containing EXE using --server and after using the Mono Ahead-of-Time Compiler (AOT).
-
-NOTE: Windows accepts '0.0.0.0' as an IP address representing any interface.  On Mac and Linux you must be specified ('127.0.0.1' is also acceptable, but '0.0.0.0' is NOT).
-
-```
-mono --aot=nrgctx-trampolines=8096,nimt-trampolines=8096,ntrampolines=4048 --server PuppyProxy.exe
-mono --server PuppyProxy.exe
-```
+Mono is missing methods on both Linux (TcpClient.Dispose) and Mac (System.Net.NetworkInformation.UnixIPGlobalProperties.GetActiveTcpConnections) that prevent operation of PuppyProxy.
