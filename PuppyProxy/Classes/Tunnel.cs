@@ -324,14 +324,12 @@ namespace PuppyProxy
                 }
             }
             catch (InvalidOperationException ioe)
-            {
-                Logging.Log(LoggingModule.Severity.Warn, "StreamReadSync inaccessible socket: " + ioe.Message);
+            { 
                 Active = false;
                 return false;
             }
             catch (IOException ie)
-            {
-                Logging.Log(LoggingModule.Severity.Warn, "StreamReadSync IO exception: " + ie.Message);
+            { 
                 Active = false;
                 return false;
             }
@@ -435,8 +433,7 @@ namespace PuppyProxy
                         }
                     }
                     else
-                    {
-                        Logging.Log(LoggingModule.Severity.Debug, "ClientReaderSync connection terminated");
+                    { 
                         Active = false;
                         return;
                     }
@@ -480,8 +477,7 @@ namespace PuppyProxy
                         }
                     }
                     else
-                    {
-                        Logging.Log(LoggingModule.Severity.Debug, "ServerReaderSync connection terminated");
+                    { 
                         Active = false;
                         return;
                     }

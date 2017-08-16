@@ -25,7 +25,7 @@ namespace PuppyProxy
         private static RequestManager _Requests;
         private static TunnelManager _Tunnels;
         private static Server _ApiServer;
-         
+
         private static TcpListener _TcpListener;
 
         private static CancellationTokenSource _CancelTokenSource;
@@ -33,23 +33,23 @@ namespace PuppyProxy
         private static int _ActiveThreads = 0;
 
         private static readonly EventWaitHandle Terminator = new EventWaitHandle(false, EventResetMode.ManualReset, "UserIntervention");
- 
-		#endregion
 
-		#region Main
+        #endregion
+
+        #region Main
 
         /// <summary>
         /// Entry point for PuppyProxy.
         /// </summary>
         /// <param name="args">Command line arguments.</param>
-		public static void Main(string[] args)
+        public static void Main(string[] args)
         {
             #region Setup
 
             SetupConsole();
-			LoadConfiguration(args);
+            LoadConfiguration(args);
             Welcome();
-             
+
             #endregion
 
             #region Initialize-Globals
@@ -157,8 +157,8 @@ namespace PuppyProxy
         {
             Console.WriteLine("---");
             Console.WriteLine("PuppyProxy starting on " + _Settings.Server.DnsHostname + ":" + _Settings.Server.Port);
-			if (String.IsNullOrEmpty(_SettingsFile)) Console.WriteLine("Use --cfg=<filename> to load from a configuration file");
-		}
+            if (String.IsNullOrEmpty(_SettingsFile)) Console.WriteLine("Use --cfg=<filename> to load from a configuration file");
+        }
 
         private static void LoadConfiguration(string[] args)
         {
@@ -172,7 +172,7 @@ namespace PuppyProxy
                     if (curr.StartsWith("--cfg="))
                     {
                         _SettingsFile = curr.Substring(6);
-                    } 
+                    }
                     else if (curr.Equals("--display-cfg"))
                     {
                         display = true;
@@ -187,7 +187,7 @@ namespace PuppyProxy
             else
             {
                 _Settings = Settings.Default();
-            } 
+            }
 
             if (display)
             {
@@ -225,10 +225,10 @@ namespace PuppyProxy
         #region Private-Request-Handler-Methods
 
         private static HttpResponse ApiHandler(HttpRequest req)
-		{
-			HttpResponse ret = new HttpResponse(req, false, 500, null, "application/json", "Internal server error", false);
+        {
+            HttpResponse ret = new HttpResponse(req, false, 500, null, "application/json", "Internal server error", false);
 
-			try
+            try
             {
                 if (req == null) throw new ArgumentNullException(nameof(req));
 
@@ -248,21 +248,21 @@ namespace PuppyProxy
 
                 switch (req.Method.ToString().ToLower().Trim())
                 {
-					case "get":
+                    case "get":
                         if (WatsonCommon.UrlEqual(req.RawUrlWithoutQuery, "/favicon.ico", false))
                         {
                             ret = new HttpResponse(req, true, 200, null, null, null, true);
                             return ret;
                         }
 
-						if (WatsonCommon.UrlEqual(req.RawUrlWithoutQuery, "/_puppy/loopback", false))
-						{
-							ret = new HttpResponse(req, true, 200, null, "text/plain", "Hello from PuppyProxy!", true);
-							return ret;
-						}
-						break;
+                        if (WatsonCommon.UrlEqual(req.RawUrlWithoutQuery, "/_puppy/loopback", false))
+                        {
+                            ret = new HttpResponse(req, true, 200, null, "text/plain", "Hello from PuppyProxy!", true);
+                            return ret;
+                        }
+                        break;
 
-					case "put":
+                    case "put":
                     case "post":
                     case "delete":
                     default:
@@ -311,7 +311,7 @@ namespace PuppyProxy
                 #endregion 
             }
         }
-         
+
         private static void AcceptConnections()
         {
             try
@@ -326,13 +326,13 @@ namespace PuppyProxy
                     _TcpListener = new TcpListener(IPAddress.Parse(_Settings.Proxy.ListenerIpAddress), _Settings.Proxy.ListenerPort);
                     Console.WriteLine("Starting TCP server on " + _Settings.Proxy.ListenerIpAddress + ":" + _Settings.Proxy.ListenerPort);
                 }
-                 
+
                 _TcpListener.Start();
 
                 while (!_CancelToken.IsCancellationRequested)
                 {
                     TcpClient client = _TcpListener.AcceptTcpClient();
-                     
+
                     Task.Run(() =>
                     {
                         string clientIp = "";
@@ -368,16 +368,16 @@ namespace PuppyProxy
 
                             string serverIp = serverIpEndpoint.Address.ToString();
                             int serverPort = serverIpEndpoint.Port;
-                              
+
                             #endregion
 
                             #region Build-HttpRequest
-                             
-                            HttpRequest req = HttpRequest.FromTcpClient(client); 
+
+                            HttpRequest req = HttpRequest.FromTcpClient(client);
                             if (req == null)
                             {
                                 _Logging.Log(LoggingModule.Severity.Warn, "AcceptConnections unable to build HTTP request from " + clientEndpoint);
-                                _ActiveThreads--; 
+                                _ActiveThreads--;
                                 return;
                             }
 
@@ -385,7 +385,7 @@ namespace PuppyProxy
                             req.SourcePort = clientPort;
                             req.DestIp = serverIp;
                             req.DestPort = serverPort;
-                            
+
                             _Logging.Log(LoggingModule.Severity.Debug, "AcceptConnections conn " + connectionId + " active " + _ActiveThreads + " " + clientEndpoint + " to " + serverEndpoint + " " + req.Method + " " + req.FullUrl);
 
                             #endregion
@@ -398,13 +398,13 @@ namespace PuppyProxy
                                     ConnectRequest(connectionId, client, req);
                                     break;
 
-                                default: 
-                                    byte[] respData = ProxyRequest(req); 
+                                default:
+                                    byte[] respData = ProxyRequest(req);
                                     if (respData != null)
                                     {
-                                        NetworkStream networkStream = client.GetStream(); 
-                                        networkStream.Write(respData, 0, respData.Length); 
-                                        networkStream.Flush(); 
+                                        NetworkStream networkStream = client.GetStream();
+                                        networkStream.Write(respData, 0, respData.Length);
+                                        networkStream.Flush();
                                     }
                                     break;
                             }
@@ -412,7 +412,7 @@ namespace PuppyProxy
                             #endregion
 
                             #region Close-Down
-                             
+
                             client.Close();
                             _ActiveThreads--;
 
@@ -420,7 +420,7 @@ namespace PuppyProxy
                         }
                         catch (IOException)
                         {
-                            
+
                         }
                         catch (Exception eInner)
                         {
@@ -428,7 +428,7 @@ namespace PuppyProxy
                         }
                     }, _CancelToken);
                 }
-            } 
+            }
             catch (Exception eOuter)
             {
                 _Logging.LogException("PuppyProxy", "AcceptConnections", eOuter);
@@ -441,7 +441,7 @@ namespace PuppyProxy
             _Requests.Add(Thread.CurrentThread.ManagedThreadId, curr);
 
             try
-            {  
+            {
                 RestResponse ret = RestRequest.SendRequestSafe(
                     req.FullUrl,
                     req.ContentType,
@@ -472,7 +472,7 @@ namespace PuppyProxy
                 resp.ContentLength = ret.ContentLength;
                 resp.Data = ret.Data;
 
-                byte[] respData = resp.ToHttpBytes(); 
+                byte[] respData = resp.ToHttpBytes();
                 return respData;
             }
             catch (Exception e)
@@ -514,7 +514,7 @@ namespace PuppyProxy
 
                 byte[] connectResponse = ConnectResponse();
                 client.Client.Send(connectResponse);
-                 
+
                 currTunnel = new Tunnel(
                     _Logging,
                     req.SourceIp,
@@ -546,12 +546,12 @@ namespace PuppyProxy
                 _Tunnels.Remove(connectionId);
 
                 if (client != null)
-                { 
+                {
                     client.Dispose();
                 }
 
                 if (server != null)
-                { 
+                {
                     server.Dispose();
                 }
             }
