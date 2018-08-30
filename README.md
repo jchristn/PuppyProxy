@@ -2,8 +2,9 @@
 
 A simple C# web proxy with support for CONNECT requests.
 
-## New in v1.0.0
-- Initial release
+## New in v1.0.1
+- Refactor private variable names
+- Added template for integrating a security module
 
 ## Version History
 Notes from previous versions are shown below (summarized to minor build)

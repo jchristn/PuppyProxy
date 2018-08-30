@@ -16,7 +16,11 @@ namespace PuppyProxy
 {
     class MainClass
     {
-        #region Global-Variables
+        #region Public-Members
+
+        #endregion
+
+        #region Private-Members
 
         private static string _SettingsFile = null;
         private static Settings _Settings;
@@ -25,6 +29,7 @@ namespace PuppyProxy
         private static RequestManager _Requests;
         private static TunnelManager _Tunnels;
         private static Server _ApiServer;
+        private static SecurityModule _SecurityModule;
 
         private static TcpListener _TcpListener;
 
@@ -68,6 +73,7 @@ namespace PuppyProxy
 
             _Requests = new RequestManager(_Logging);
             _Tunnels = new TunnelManager(_Logging);
+            _SecurityModule = new SecurityModule(_Logging);
 
             _ApiServer = new Server(
                 _Settings.Server.DnsHostname,
@@ -390,23 +396,40 @@ namespace PuppyProxy
 
                             #endregion
 
+                            #region Security-Check
+
+                            string denyReason = null;
+                            bool isPermitted = _SecurityModule.IsPermitted(req, out denyReason);
+                            if (!isPermitted)
+                            {
+                                _Logging.Log(LoggingModule.Severity.Info, "Request denied by security module " +
+                                    req.SourceIp + ":" + req.SourcePort + " to " +
+                                    req.FullUrl + 
+                                    " [" + denyReason + "]"); 
+                            }
+
+                            #endregion
+
                             #region Process-Connection
 
-                            switch (req.Method.ToLower().Trim())
+                            if (isPermitted)
                             {
-                                case "connect":
-                                    ConnectRequest(connectionId, client, req);
-                                    break;
+                                switch (req.Method.ToLower().Trim())
+                                {
+                                    case "connect":
+                                        ConnectRequest(connectionId, client, req);
+                                        break;
 
-                                default:
-                                    byte[] respData = ProxyRequest(req);
-                                    if (respData != null)
-                                    {
-                                        NetworkStream networkStream = client.GetStream();
-                                        networkStream.Write(respData, 0, respData.Length);
-                                        networkStream.Flush();
-                                    }
-                                    break;
+                                    default:
+                                        byte[] respData = ProxyRequest(req);
+                                        if (respData != null)
+                                        {
+                                            NetworkStream networkStream = client.GetStream();
+                                            networkStream.Write(respData, 0, respData.Length);
+                                            networkStream.Flush();
+                                        }
+                                        break;
+                                }
                             }
 
                             #endregion

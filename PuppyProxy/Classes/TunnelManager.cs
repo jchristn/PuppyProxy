@@ -20,8 +20,8 @@ namespace PuppyProxy
         #region Private-Members
 
         private LoggingModule _Logging; 
-        private Dictionary<int, Tunnel> Tunnels;
-        private readonly object TunnelsLock;
+        private Dictionary<int, Tunnel> _Tunnels;
+        private readonly object _TunnelsLock;
 
         #endregion
 
@@ -42,8 +42,8 @@ namespace PuppyProxy
         public TunnelManager(LoggingModule logging)
         {
             _Logging = logging;
-            Tunnels = new Dictionary<int, Tunnel>();
-            TunnelsLock = new object();
+            _Tunnels = new Dictionary<int, Tunnel>();
+            _TunnelsLock = new object();
         }
 
         #endregion
@@ -57,10 +57,10 @@ namespace PuppyProxy
         /// <param name="curr">Tunnel object.</param>
         public void Add(int threadId, Tunnel curr)
         {
-            lock (TunnelsLock)
+            lock (_TunnelsLock)
             {
-                if (Tunnels.ContainsKey(threadId)) Tunnels.Remove(threadId);
-                Tunnels.Add(threadId, curr);
+                if (_Tunnels.ContainsKey(threadId)) _Tunnels.Remove(threadId);
+                _Tunnels.Add(threadId, curr);
             }
         }
 
@@ -70,12 +70,12 @@ namespace PuppyProxy
         /// <param name="threadId">Thread ID or other unique ID.</param>
         public void Remove(int threadId)
         {
-            lock (TunnelsLock)
+            lock (_TunnelsLock)
             {
-                if (Tunnels.ContainsKey(threadId))
+                if (_Tunnels.ContainsKey(threadId))
                 {
-                    Tunnel curr = Tunnels[threadId];
-                    Tunnels.Remove(threadId);
+                    Tunnel curr = _Tunnels[threadId];
+                    _Tunnels.Remove(threadId);
                     curr.Dispose();
                 }
             }
@@ -89,9 +89,9 @@ namespace PuppyProxy
         {
             Dictionary<int, Tunnel> ret = new Dictionary<int, Tunnel>();
 
-            lock (TunnelsLock)
+            lock (_TunnelsLock)
             {
-                foreach (KeyValuePair<int, Tunnel> curr in Tunnels)
+                foreach (KeyValuePair<int, Tunnel> curr in _Tunnels)
                 {
                     ret.Add(curr.Key, curr.Value.Metadata());
                 }
@@ -108,9 +108,9 @@ namespace PuppyProxy
         {
             Dictionary<int, Tunnel> ret = new Dictionary<int, Tunnel>();
 
-            lock (TunnelsLock)
+            lock (_TunnelsLock)
             {
-                ret = new Dictionary<int, Tunnel>(Tunnels);
+                ret = new Dictionary<int, Tunnel>(_Tunnels);
             }
 
             return ret;
@@ -123,9 +123,9 @@ namespace PuppyProxy
         /// <returns>True if the tunnel is active.</returns>
         public bool Active(int threadId)
         {
-            lock (TunnelsLock)
+            lock (_TunnelsLock)
             {
-                if (Tunnels.ContainsKey(threadId)) return true;
+                if (_Tunnels.ContainsKey(threadId)) return true;
             }
 
             return false;
@@ -137,9 +137,9 @@ namespace PuppyProxy
         /// <returns>Integer.</returns>
         public int Count()
         {
-            lock (TunnelsLock)
+            lock (_TunnelsLock)
             {
-                return Tunnels.Count;
+                return _Tunnels.Count;
             }
         }
 

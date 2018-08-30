@@ -20,7 +20,7 @@ namespace PuppyProxy
         #region Private-Members
 
         private LoggingModule _Logging; 
-        private ConcurrentDictionary<int, Request> Requests; 
+        private ConcurrentDictionary<int, Request> _Requests; 
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace PuppyProxy
         public RequestManager(LoggingModule logging)
         {
             _Logging = logging;
-            Requests = new ConcurrentDictionary<int, Request>();
+            _Requests = new ConcurrentDictionary<int, Request>();
         }
 
         #endregion
@@ -55,7 +55,7 @@ namespace PuppyProxy
         /// <param name="req">The request object.</param>
         public void Add(int threadId, Request req)
         {
-            Requests.TryAdd(threadId, req);
+            _Requests.TryAdd(threadId, req);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace PuppyProxy
         public void Remove(int threadId)
         {
             Request val;
-            Requests.TryRemove(threadId, out val);
+            _Requests.TryRemove(threadId, out val);
         }
         
         /// <summary>
@@ -74,7 +74,7 @@ namespace PuppyProxy
         /// <returns>Dictionary containing thread ID or other unique ID and the request itself.</returns>
         public Dictionary<int, Request> Get()
         {
-            return new Dictionary<int, Request>(Requests);
+            return new Dictionary<int, Request>(_Requests);
         }
 
         #endregion

@@ -77,8 +77,8 @@ namespace PuppyProxy
 
         #region Private-Members
 
-        private LoggingModule Logging;
-        private bool Active = true;
+        private LoggingModule _Logging;
+        private bool _Active = true;
 
         #endregion
 
@@ -125,7 +125,7 @@ namespace PuppyProxy
             if (client == null) throw new ArgumentNullException(nameof(client));
             if (server == null) throw new ArgumentNullException(nameof(server));
 
-            Logging = logging;
+            _Logging = logging;
             TimestampUtc = DateTime.Now.ToUniversalTime();
             SourceIp = sourceIp;
             SourcePort = sourcePort; 
@@ -148,7 +148,7 @@ namespace PuppyProxy
             Task.Run(() => ClientReaderAsync());
             Task.Run(() => ServerReaderAsync());
 
-            Active = true;
+            _Active = true;
         }
 
         #endregion
@@ -232,8 +232,8 @@ namespace PuppyProxy
             }
 
             // Console.WriteLine(" " + Active + " " + clientActive + " " + clientSocketActive + " " + serverActive + " " + serverSocketActive);
-            Active = Active && clientActive && clientSocketActive && serverActive && serverSocketActive;
-            return Active;
+            _Active = _Active && clientActive && clientSocketActive && serverActive && serverSocketActive;
+            return _Active;
         }
 
         /// <summary>
@@ -325,18 +325,18 @@ namespace PuppyProxy
             }
             catch (InvalidOperationException ioe)
             { 
-                Active = false;
+                _Active = false;
                 return false;
             }
             catch (IOException ie)
             { 
-                Active = false;
+                _Active = false;
                 return false;
             }
             catch (Exception e)
             {
-                Logging.LogException("Tunnel", "StreamReadSync", e);
-                Active = false;
+                _Logging.LogException("Tunnel", "StreamReadSync", e);
+                _Active = false;
                 return false;
             }
             finally
@@ -375,18 +375,18 @@ namespace PuppyProxy
             }
             catch (InvalidOperationException)
             {
-                Active = false;
+                _Active = false;
                 return null;
             }
             catch (IOException)
             {
-                Active = false;
+                _Active = false;
                 return null;
             }
             catch (Exception e)
             {
-                Logging.LogException("Tunnel", "StreamReadAsync", e);
-                Active = false;
+                _Logging.LogException("Tunnel", "StreamReadAsync", e);
+                _Active = false;
                 return null;
             }
             finally
@@ -434,23 +434,23 @@ namespace PuppyProxy
                     }
                     else
                     { 
-                        Active = false;
+                        _Active = false;
                         return;
                     }
                 }
             }
             catch (ObjectDisposedException)
             {
-                Active = false;
+                _Active = false;
             }
             catch (SocketException)
             {
-                Active = false;
+                _Active = false;
             }
             catch (Exception e)
             {
-                Logging.LogException("Tunnel", "ClientReaderSync", e);
-                Active = false;
+                _Logging.LogException("Tunnel", "ClientReaderSync", e);
+                _Active = false;
             }
         }
 
@@ -478,23 +478,23 @@ namespace PuppyProxy
                     }
                     else
                     { 
-                        Active = false;
+                        _Active = false;
                         return;
                     }
                 }
             }
             catch (ObjectDisposedException)
             {
-                Active = false;
+                _Active = false;
             }
             catch (SocketException)
             {
-                Active = false;
+                _Active = false;
             }
             catch (Exception e)
             {
-                Logging.LogException("Tunnel", "ServerReaderSync", e);
-                Active = false;
+                _Logging.LogException("Tunnel", "ServerReaderSync", e);
+                _Active = false;
             }
         }
 
@@ -515,21 +515,21 @@ namespace PuppyProxy
                         data = null;
                     }
 
-                    if (!Active) break;
+                    if (!_Active) break;
                 }
             }
             catch (ObjectDisposedException)
             {
-                Active = false;
+                _Active = false;
             }
             catch (SocketException)
             {
-                Active = false;
+                _Active = false;
             }
             catch (Exception e)
             {
-                Logging.LogException("Tunnel", "ClientReaderAsync", e);
-                Active = false;
+                _Logging.LogException("Tunnel", "ClientReaderAsync", e);
+                _Active = false;
             }
         }
 
@@ -550,21 +550,21 @@ namespace PuppyProxy
                         data = null;
                     }
 
-                    if (!Active) break;
+                    if (!_Active) break;
                 }
             }
             catch (ObjectDisposedException)
             {
-                Active = false;
+                _Active = false;
             }
             catch (SocketException)
             {
-                Active = false;
+                _Active = false;
             }
             catch (Exception e)
             {
-                Logging.LogException("Tunnel", "ServerReaderAsync", e);
-                Active = false;
+                _Logging.LogException("Tunnel", "ServerReaderAsync", e);
+                _Active = false;
             }
         }
 

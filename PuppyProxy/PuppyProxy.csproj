@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\SecurityModule.cs" />
     <Compile Include="Classes\RequestManager.cs" />
     <Compile Include="Classes\Request.cs" />
     <Compile Include="Classes\TunnelManager.cs" />
