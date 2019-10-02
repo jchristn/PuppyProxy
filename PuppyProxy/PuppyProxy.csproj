@@ -13,6 +13,7 @@
     <RepositoryType>Github</RepositoryType>
     <PackageTags>proxy http https waf reverse squid</PackageTags>
     <PackageReleaseNotes>Update dependencies, retarget to .NET Core and .NET Framework</PackageReleaseNotes>
+    <PackageIconUrl>https://github.com/jchristn/PuppyProxy/raw/master/assets/puppy.ico</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
