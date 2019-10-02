@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 using SyslogLogging;
 
 namespace PuppyProxy
-{
+{ 
     /// <summary>
-    /// A CONNECT request and its internal properties.
+    /// CONNECT tunnel.
     /// </summary>
-    internal class Tunnel : IDisposable
+    public class Tunnel : IDisposable
     {
         #region Public-Members
 
@@ -323,19 +323,19 @@ namespace PuppyProxy
                     return true;
                 }
             }
-            catch (InvalidOperationException ioe)
+            catch (InvalidOperationException)
             { 
                 _Active = false;
                 return false;
             }
-            catch (IOException ie)
+            catch (IOException)
             { 
                 _Active = false;
                 return false;
             }
             catch (Exception e)
             {
-                _Logging.LogException("Tunnel", "StreamReadSync", e);
+                _Logging.Exception("Tunnel", "StreamReadSync", e);
                 _Active = false;
                 return false;
             }
@@ -385,7 +385,7 @@ namespace PuppyProxy
             }
             catch (Exception e)
             {
-                _Logging.LogException("Tunnel", "StreamReadAsync", e);
+                _Logging.Exception("Tunnel", "StreamReadAsync", e);
                 _Active = false;
                 return null;
             }
@@ -449,7 +449,7 @@ namespace PuppyProxy
             }
             catch (Exception e)
             {
-                _Logging.LogException("Tunnel", "ClientReaderSync", e);
+                _Logging.Exception("Tunnel", "ClientReaderSync", e);
                 _Active = false;
             }
         }
@@ -493,7 +493,7 @@ namespace PuppyProxy
             }
             catch (Exception e)
             {
-                _Logging.LogException("Tunnel", "ServerReaderSync", e);
+                _Logging.Exception("Tunnel", "ServerReaderSync", e);
                 _Active = false;
             }
         }
@@ -528,7 +528,7 @@ namespace PuppyProxy
             }
             catch (Exception e)
             {
-                _Logging.LogException("Tunnel", "ClientReaderAsync", e);
+                _Logging.Exception("Tunnel", "ClientReaderAsync", e);
                 _Active = false;
             }
         }
@@ -563,7 +563,7 @@ namespace PuppyProxy
             }
             catch (Exception e)
             {
-                _Logging.LogException("Tunnel", "ServerReaderAsync", e);
+                _Logging.Exception("Tunnel", "ServerReaderAsync", e);
                 _Active = false;
             }
         }

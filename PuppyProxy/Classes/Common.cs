@@ -1,19 +1,12 @@
 ﻿using System;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace PuppyProxy
-{
-    /// <summary>
-    /// Commonly-used methods.
-    /// </summary>
-    public static class Common
-    {
-        /// <summary>
-        /// Display a prompt and return a boolean response.
-        /// </summary>
-        /// <param name="question">The prompt to display.</param>
-        /// <param name="yesDefault">Indicates whether or not 'true' is the default.</param>
-        /// <returns>Boolean.</returns>
-        public static bool InputBoolean(string question, bool yesDefault)
+{ 
+    internal static class Common
+    { 
+        internal static bool InputBoolean(string question, bool yesDefault)
         {
             Console.Write(question);
 
@@ -55,15 +48,8 @@ namespace PuppyProxy
                 return false;
             }
         }
-
-        /// <summary>
-        /// Display a prompt and return a string response.
-        /// </summary>
-        /// <param name="question">The prompt to display.</param>
-        /// <param name="defaultAnswer">The default response.</param>
-        /// <param name="allowNull">Indicates whether or not null is acceptable.</param>
-        /// <returns>String.</returns>
-        public static string InputString(string question, string defaultAnswer, bool allowNull)
+         
+        internal static string InputString(string question, string defaultAnswer, bool allowNull)
         {
             while (true)
             {
@@ -88,16 +74,8 @@ namespace PuppyProxy
                 return userInput;
             }
         }
-
-        /// <summary>
-        /// Display a prompt and return an integer response.
-        /// </summary>
-        /// <param name="question">The prompt to display.</param>
-        /// <param name="defaultAnswer">The default response.</param>
-        /// <param name="positiveOnly">Indicates whether or not a positive value must be supplied.</param>
-        /// <param name="allowZero">Indicates whether or not zero is an acceptable response.</param>
-        /// <returns>Integer.</returns>
-        public static int InputInteger(string question, int defaultAnswer, bool positiveOnly, bool allowZero)
+         
+        internal static int InputInteger(string question, int defaultAnswer, bool positiveOnly, bool allowZero)
         {
             while (true)
             {
@@ -137,6 +115,66 @@ namespace PuppyProxy
 
                 return ret;
             }
+        }
+
+        internal static string SerializeJson(object obj, bool pretty)
+        {
+            if (obj == null) return null;
+            string json;
+
+            if (pretty)
+            {
+                json = JsonConvert.SerializeObject(
+                  obj,
+                  Newtonsoft.Json.Formatting.Indented,
+                  new JsonSerializerSettings
+                  {
+                      NullValueHandling = NullValueHandling.Ignore,
+                      DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                  });
+            }
+            else
+            {
+                json = JsonConvert.SerializeObject(obj,
+                  new JsonSerializerSettings
+                  {
+                      NullValueHandling = NullValueHandling.Ignore,
+                      DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                  });
+            }
+
+            return json;
+        }
+
+        internal static T DeserializeJson<T>(string json)
+        {
+            if (String.IsNullOrEmpty(json)) throw new ArgumentNullException(nameof(json));
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        internal static T DeserializeJson<T>(byte[] data)
+        {
+            if (data == null || data.Length < 1) throw new ArgumentNullException(nameof(data));
+            return DeserializeJson<T>(Encoding.UTF8.GetString(data));
+        }
+
+        internal static T CopyObject<T>(object o)
+        {
+            if (o == null) return default(T);
+            string json = SerializeJson(o, false);
+            T ret = DeserializeJson<T>(json);
+            return ret;
+        }
+
+        internal static byte[] AppendBytes(byte[] orig, byte[] append)
+        {
+            if (append == null) return orig;
+            if (orig == null) return append;
+
+            byte[] ret = new byte[orig.Length + append.Length];
+            Buffer.BlockCopy(orig, 0, ret, 0, orig.Length);
+            Buffer.BlockCopy(append, 0, ret, orig.Length, append.Length);
+            return ret;
         }
     }
 }

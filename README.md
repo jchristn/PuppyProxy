@@ -2,25 +2,31 @@
 
 A simple C# web proxy with support for CONNECT requests.
 
-## New in v1.0.1
-- Refactor private variable names
-- Added template for integrating a security module
+## New in v1.1.0
 
-## Version History
-Notes from previous versions are shown below (summarized to minor build)
+- Retarget to .NET Core and .NET Framework
+- Async methods internally
+- Dependency update
+- Logging cleanup
 
-v1.0.0
-- Initial release
+Refer to CHANGELOG.md for previous versions.
 
 ## Getting Started
-Compile from source and use Mono's AOT (see below) if running in Linux or Mac.  Running without specifying a configuration file will cause PuppyProxy to begin listening on port 8000, supporting HTTP proxy including CONNECT.  Use ```--cfg=<filename.txt>``` to specify a configuration file.  Use ```--display-cfg``` to show the configuration (helpful if you want a template by which to create your own).
 
-NOTE: You may need to run as administrator if listening on a port under 1024.
+PuppyProxy is targeted to both .NET Core and .NET Framework.  You **MUST** run PuppyProxy as an administrator.
+
+### .NET Core
 ```
-Windows
-C:\> PuppyProxy.exe
-C:\> PuppyProxy.exe --cfg=filename.txt
+# dotnet PuppyProxy.dll
 ```
 
-## Running under Mono
-Mono is missing methods on both Linux (TcpClient.Dispose) and Mac (System.Net.NetworkInformation.UnixIPGlobalProperties.GetActiveTcpConnections) that prevent operation of PuppyProxy.
+### .NET Framework
+```
+> PuppyProxy.exe
+```
+
+## Testing
+
+You can set your proxy in ```Internet Options``` to point to PuppyProxy for both HTTP and HTTPS on the default IP address of ```127.0.0.1``` and port ```8000```.  
+
+Alternatively, you can specify a proxy address while using cURL by using ```-x http://127.0.0.1:8000```.

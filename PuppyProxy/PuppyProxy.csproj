@@ -1,70 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{8507AE87-CF12-42ED-BC9C-020A5DE7DC49}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>PuppyProxy</RootNamespace>
-    <AssemblyName>PuppyProxy</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworks>netcoreapp2.2;net462</TargetFrameworks>
+    <Version>1.1.0</Version>
+    <Authors>Joel Christner</Authors>
+    <Company>Joel Christner</Company>
+    <Description>Lightweight HTTP and HTTPS proxy written in C#</Description>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/jchristn/puppyproxy</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jchristn/puppyproxy</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>proxy http https waf reverse squid</PackageTags>
+    <PackageReleaseNotes>Update dependencies, retarget to .NET Core and .NET Framework</PackageReleaseNotes>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ExternalConsole>true</ExternalConsole>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ExternalConsole>true</ExternalConsole>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="RestWrapper, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestWrapper.1.0.8\lib\RestWrapper.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RegexMatcher">
-      <HintPath>..\packages\RegexMatcher.1.0.0\lib\RegexMatcher.dll</HintPath>
-    </Reference>
-    <Reference Include="SyslogLogging">
-      <HintPath>..\packages\SyslogLogging.1.0.8\lib\SyslogLogging.dll</HintPath>
-    </Reference>
-    <Reference Include="Watson, Version=1.2.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Watson.1.2.5\lib\Watson.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="RestWrapper" Version="2.1.2" />
+    <PackageReference Include="SyslogLogging" Version="1.2.1" />
+    <PackageReference Include="Watson" Version="3.0.4" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Classes\SecurityModule.cs" />
-    <Compile Include="Classes\RequestManager.cs" />
-    <Compile Include="Classes\Request.cs" />
-    <Compile Include="Classes\TunnelManager.cs" />
-    <Compile Include="Classes\Tunnel.cs" />
-    <Compile Include="PuppyProxy.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\Settings.cs" />
-    <Compile Include="Classes\Common.cs" />
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="APIs\DELETE\" />
-    <Folder Include="APIs\GET\" />
-    <Folder Include="APIs\POST\" />
-    <Folder Include="APIs\PUT\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+
 </Project>

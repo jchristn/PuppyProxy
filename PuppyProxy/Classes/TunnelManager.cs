@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 using SyslogLogging;
 
 namespace PuppyProxy
-{   
-    /// <summary>
-    /// Maintains state about each active tunnel.
-    /// </summary>
+{    
     internal class TunnelManager
     {
         #region Public-Members
@@ -19,9 +16,9 @@ namespace PuppyProxy
 
         #region Private-Members
 
-        private LoggingModule _Logging; 
-        private Dictionary<int, Tunnel> _Tunnels;
-        private readonly object _TunnelsLock;
+        private LoggingModule _Logging;
+        private Dictionary<int, Tunnel> _Tunnels = new Dictionary<int, Tunnel>();
+        private readonly object _TunnelsLock = new object();
 
         #endregion
 
@@ -41,21 +38,14 @@ namespace PuppyProxy
         /// <param name="logging">Logging module instance.</param>
         public TunnelManager(LoggingModule logging)
         {
-            _Logging = logging;
-            _Tunnels = new Dictionary<int, Tunnel>();
-            _TunnelsLock = new object();
+            _Logging = logging;  
         }
 
         #endregion
 
-        #region Public-Methods
-
-        /// <summary>
-        /// Add a tunnel.
-        /// </summary>
-        /// <param name="threadId">Thread ID or other unique ID.</param>
-        /// <param name="curr">Tunnel object.</param>
-        public void Add(int threadId, Tunnel curr)
+        #region Internal-Methods
+         
+        internal void Add(int threadId, Tunnel curr)
         {
             lock (_TunnelsLock)
             {
@@ -63,12 +53,8 @@ namespace PuppyProxy
                 _Tunnels.Add(threadId, curr);
             }
         }
-
-        /// <summary>
-        /// Remove a tunnel.
-        /// </summary>
-        /// <param name="threadId">Thread ID or other unique ID.</param>
-        public void Remove(int threadId)
+         
+        internal void Remove(int threadId)
         {
             lock (_TunnelsLock)
             {
@@ -80,12 +66,8 @@ namespace PuppyProxy
                 }
             }
         }
-
-        /// <summary>
-        /// Retrieve metadata about active tunnels.
-        /// </summary>
-        /// <returns>Dictionary with thread ID or other unique ID and tunnel metadata.</returns>
-        public Dictionary<int, Tunnel> GetMetadata()
+         
+        internal Dictionary<int, Tunnel> GetMetadata()
         {
             Dictionary<int, Tunnel> ret = new Dictionary<int, Tunnel>();
 
@@ -99,12 +81,8 @@ namespace PuppyProxy
 
             return ret;
         }
-
-        /// <summary>
-        /// Retrieve the full tunnel dictionary including TCP and stream objects.
-        /// </summary>
-        /// <returns>Dictionary with thread ID or other unique ID and tunnel objects.</returns>
-        public Dictionary<int, Tunnel> GetFull()
+         
+        internal Dictionary<int, Tunnel> GetFull()
         {
             Dictionary<int, Tunnel> ret = new Dictionary<int, Tunnel>();
 
@@ -115,13 +93,8 @@ namespace PuppyProxy
 
             return ret;
         }
-
-        /// <summary>
-        /// Determine if a tunnel is active by thread ID or other unique ID.
-        /// </summary>
-        /// <param name="threadId">Thread ID or other unique ID.</param>
-        /// <returns>True if the tunnel is active.</returns>
-        public bool Active(int threadId)
+         
+        internal bool Active(int threadId)
         {
             lock (_TunnelsLock)
             {
@@ -130,12 +103,8 @@ namespace PuppyProxy
 
             return false;
         }
-
-        /// <summary>
-        /// Determine the number of active tunnels.
-        /// </summary>
-        /// <returns>Integer.</returns>
-        public int Count()
+         
+        internal int Count()
         {
             lock (_TunnelsLock)
             {

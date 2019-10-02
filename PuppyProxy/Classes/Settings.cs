@@ -19,12 +19,7 @@ namespace PuppyProxy
         /// Enable or disable the console.
         /// </summary>
         public bool EnableConsole { get; set; }
-
-        /// <summary>
-        /// Management API server settings.  Reserved for future use.
-        /// </summary>
-        public SettingsMgmtServer Server { get; set; }
-
+         
         /// <summary>
         /// Logging settings.
         /// </summary>
@@ -43,8 +38,7 @@ namespace PuppyProxy
         {
             Settings ret = new Settings();
             ret.Environment = "linux";
-            ret.EnableConsole = true;
-            ret.Server = SettingsMgmtServer.Default();
+            ret.EnableConsole = true; 
             ret.Logging = SettingsLogging.Default();
             ret.Proxy = SettingsProxy.Default();
             return ret;
@@ -64,69 +58,17 @@ namespace PuppyProxy
             if (!File.Exists(filename))
             {
                 Console.WriteLine("Creating default configuration in " + filename);
-                File.WriteAllBytes(filename, Encoding.UTF8.GetBytes(WatsonCommon.SerializeJson(ret)));
+                File.WriteAllBytes(filename, Encoding.UTF8.GetBytes(Common.SerializeJson(ret, true)));
                 return ret;
             }
             else
             {
-                ret = WatsonCommon.DeserializeJson<Settings>(File.ReadAllBytes(filename));
+                ret = Common.DeserializeJson<Settings>(File.ReadAllBytes(filename));
                 return ret;
             }
         }
 	}
-
-    /// <summary>
-    /// Management API server settings.
-    /// </summary>
-    public class SettingsMgmtServer
-    {
-        /// <summary>
-        /// TCP port on which to listen.
-        /// </summary>
-        public int Port { get; set; }
-
-        /// <summary>
-        /// DNS hostname or IP address on which to accept requests.
-        /// </summary>
-        public string DnsHostname { get; set; }
-
-        /// <summary>
-        /// Enable or disable SSL.
-        /// </summary>
-        public bool Ssl { get; set; }
-
-        /// <summary>
-        /// Enable or disable log messages.
-        /// </summary>
-        public bool DebugServer { get; set; }
-
-        /// <summary>
-        /// Enable or disable enumeration of requests received.
-        /// </summary>
-        public bool DebugRequests { get; set; }
-
-        /// <summary>
-        /// Enable or disable enumeration of responses sent.
-        /// </summary>
-        public bool DebugResponses { get; set; }
-
-        /// <summary>
-        /// Default values for management API server settings.
-        /// </summary>
-        /// <returns>SettingsMgmtServer object.</returns>
-        public static SettingsMgmtServer Default()
-        {
-            SettingsMgmtServer ret = new SettingsMgmtServer();
-            ret.Port = 8001;
-            ret.DnsHostname = "127.0.0.1";
-            ret.Ssl = false;
-            ret.DebugServer = false;
-            ret.DebugRequests = false;
-            ret.DebugResponses = false;
-            return ret;
-        }
-    }
-
+     
     /// <summary>
     /// Logging settings.
     /// </summary>
@@ -166,7 +108,7 @@ namespace PuppyProxy
             SettingsLogging ret = new SettingsLogging();
             ret.SyslogEnable = true;
             ret.ConsoleEnable = true;
-            ret.MinimumLevel = 1;
+            ret.MinimumLevel = 0;
             ret.SyslogServerIp = "127.0.0.1";
             ret.SyslogServerPort = 514;
             return ret;
@@ -202,27 +144,7 @@ namespace PuppyProxy
         /// Maximum number of threads to support.
         /// </summary>
         public int MaxThreads { get; set; }
-
-        /// <summary>
-        /// Enable or disable log messages for the proxy server.
-        /// </summary>
-        public bool DebugServer { get; set; }
-        
-        /// <summary>
-        /// Enable or disable enumeration of requests received.
-        /// </summary>
-        public bool DebugRequests { get; set; }
-        
-        /// <summary>
-        /// Enable or disable enumeration of responses sent.
-        /// </summary>
-        public bool DebugResponses { get; set; }
-
-        /// <summary>
-        /// Enable or disable logging request metadata.
-        /// </summary>
-        public bool LogRequestMetadata { get; set; }
-
+         
         /// <summary>
         /// Default values for proxy server settings.
         /// </summary>
@@ -232,13 +154,9 @@ namespace PuppyProxy
             SettingsProxy ret = new SettingsProxy();
             ret.AcceptInvalidCertificates = true;
             ret.ListenerPort = 8000;
-            ret.ListenerIpAddress = "";
+            ret.ListenerIpAddress = "0.0.0.0";
             ret.Ssl = false;
-            ret.MaxThreads = 100;
-            ret.DebugServer = false;
-            ret.DebugRequests = false;
-            ret.DebugResponses = false;
-            ret.LogRequestMetadata = true;
+            ret.MaxThreads = 100; 
             return ret;
         }
     }
