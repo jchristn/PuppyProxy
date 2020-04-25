@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp2.2;net462</TargetFrameworks>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>Joel Christner</Authors>
     <Company>Joel Christner</Company>
     <Description>Lightweight HTTP and HTTPS proxy written in C#</Description>
@@ -12,8 +12,10 @@
     <RepositoryUrl>https://github.com/jchristn/puppyproxy</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>proxy http https waf reverse squid</PackageTags>
-    <PackageReleaseNotes>Update dependencies, retarget to .NET Core and .NET Framework</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix for multi-platform</PackageReleaseNotes>
     <PackageIconUrl>https://github.com/jchristn/PuppyProxy/raw/master/assets/puppy.ico</PackageIconUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>(c)2019 Joel Christner</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

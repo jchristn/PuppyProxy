@@ -2,12 +2,9 @@
 
 A simple C# web proxy with support for CONNECT requests.
 
-## New in v1.1.0
+## New in v1.1.1
 
-- Retarget to .NET Core and .NET Framework
-- Async methods internally
-- Dependency update
-- Logging cleanup
+- Fix for multi-platform
 
 Refer to CHANGELOG.md for previous versions.
 

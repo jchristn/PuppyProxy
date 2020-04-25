@@ -29,7 +29,7 @@ namespace PuppyProxy
         private static CancellationToken _CancelToken;
         private static int _ActiveThreads = 0;
 
-        private static readonly EventWaitHandle Terminator = new EventWaitHandle(false, EventResetMode.ManualReset, "UserIntervention");
+        private static readonly EventWaitHandle Terminator = new EventWaitHandle(false, EventResetMode.ManualReset);
          
         private static void Main(string[] args)
         {
