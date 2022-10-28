@@ -218,6 +218,9 @@ namespace PuppyProxy
 
                 if (ServerTcpClient.Client != null)
                 {
+                    // see https://github.com/jchristn/PuppyProxy/compare/master...waldekmastykarz:PuppyProxy:master
+
+                    /*
                     TcpState serverState = GetTcpRemoteState(ServerTcpClient);
 
                     if (serverState == TcpState.Established
@@ -228,6 +231,9 @@ namespace PuppyProxy
                     {
                         serverSocketActive = true;
                     }
+                    */
+
+                    serverSocketActive = true;
                 }
             }
 

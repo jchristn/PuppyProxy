@@ -35,7 +35,6 @@ namespace PuppyProxy
         {
             #region Setup
 
-            if (Console.WindowWidth < 80) Console.WindowWidth = 80;
             LoadConfiguration(args);
             Welcome();
 
@@ -124,19 +123,10 @@ namespace PuppyProxy
          
         #region Setup-Methods
 
-        private static string Logo()
-        {
-            return Environment.NewLine +
-                "█▀▀█ █░░█ █▀▀█ █▀▀█ █░░█" + Environment.NewLine +
-                "█░░█ █░░█ █░░█ █░░█ █▄▄█" + Environment.NewLine +
-                "█▀▀▀ ░▀▀▀ █▀▀▀ █▀▀▀ ▄▄▄█" + Environment.NewLine +
-                Environment.NewLine;
-        }
-
         private static void Welcome()
         {
             Console.WriteLine(
-                Logo() +
+                Constants.Logo +
                 "PuppyProxy starting on " + _Settings.Proxy.ListenerIpAddress + ":" + _Settings.Proxy.ListenerPort);
 
             if (String.IsNullOrEmpty(_SettingsFile)) Console.WriteLine("Use --cfg=<filename> to load from a configuration file");
@@ -168,7 +158,7 @@ namespace PuppyProxy
             }
             else
             {
-                _Settings = Settings.Default();
+                _Settings = new Settings();
             }
 
             if (display)
